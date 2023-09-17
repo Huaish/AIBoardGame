@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>縱橫殺棋</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.js"></script>
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></link>
+        <link rel="stylesheet" href="static/style.css"></link>
+        
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+              integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.css">
+
+        <!-- UIkit CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.16.17/dist/css/uikit.min.css" />
+
+        <!-- UIkit JS -->
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.16.17/dist/js/uikit.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.16.17/dist/js/uikit-icons.min.js"></script>
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    </head>
+
+    <body>
+        <nav class="navbar navbar-default">
+            <h1 id="logo">縱橫殺棋對抗賽</h1>
+        </nav>
+        
+        <div class="">
+            <div class="uk-container">
+                <div class="uk-flex">
+                    <div class="uk-card uk-card-body">
+                        <div id="board"></div>
+                    </div>
+                    <div class="uk-card uk-card-body uk-margin-left">
+                        <h3><span id="status">Player's turn</span></h3>
+
+                        <table class="uk-table uk-table-divider">
+                            <thead>
+                                <tr>
+                                    <th>Player</th>
+                                    <th>AI</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td id = "player-point">0</td>
+                                    <td id = "AI-point">0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p uk-margin>
+                            <button class="uk-button uk-button-default" onclick="createBoard()">New Game</button>
+                            <button class="uk-button uk-button-default uk-margin-small-right" type="button" uk-toggle="target: #offcanvas-push">How to play</button>
+                        </p>
+    
+    
+                        <div class="js-upload uk-placeholder uk-text-center">
+                            <span uk-icon="icon: cloud-upload"></span>
+                            <span class="uk-text-middle">Attach txt file by dropping them here or</span>
+                            <div uk-form-custom>
+                                <input type="file" multiple accept=".txt">
+                                <span class="uk-link">selecting one</span>
+                            </div>
+                        </div>
+                        <progress id="js-progressbar" class="uk-progress" value="0" max="100" hidden></progress>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="offcanvas-push" uk-offcanvas="mode: push; overlay: true">
+            <div class="uk-offcanvas-bar">
+        
+                <button class="uk-offcanvas-close" type="button" uk-close></button>
+        
+                <h4>遊戲規則</h4>
+                <p>
+                    給定一 n 行 m 列的矩形棋盤，其中某些格子放置有黑色棋子，兩玩家輪流移動。
+                    每次移動時，玩家可選擇至少有一顆棋子的縱向或橫向的任一行或列，將該行或列中的所有棋子全部取走。
+                    當所有棋子都被取走時，遊戲結束，取走棋子數最多者獲勝。
+                </p>
+                <h4>操作方法</h4>
+                <p>
+                    點擊棋盤上 1-9 或 A-Z 的格子，即可選擇該格子所在的行或列，並將該行或列中的所有棋子全部取走。
+                    點擊 Take Back 按鈕，即可悔棋。
+                    點擊 New Game 按鈕，即可開始新遊戲。
+                    點擊 Attach txt file 按鈕，即可上傳初始盤面檔案檔案。
+                </p>
+
+                <h4>Game Rule</h4>
+                <p>
+                    Given a n rows m columns rectangular board, some of the squares are placed with black pieces, and the two players take turns to move.
+                    Each time, the player can choose a vertical or horizontal row or column with at least one piece, and take away all the pieces in that row or column.
+                    When all the pieces are taken away, the game is over, and the one with the most pieces taken away wins.
+                </p>
+
+                <h4>How to play</h4>
+                <p>
+                    Click on the squares 1-9 or A-Z on the board to select the row or column where the square is located, and take away all the pieces in that row or column.
+                    Click the Take Back button to undo the move.
+                    Click the New Game button to start a new game.
+                    Click the Attach txt file button to upload the initial board file.
+                </p>
+        
+            </div>
+        </div>
+
+        <script type="text/javascript" src="{{ url_for('static',filename='scripts.js') }}"></script>
+        
+        
+    </body>
+</html>
